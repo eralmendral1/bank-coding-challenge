@@ -1,63 +1,73 @@
-import { v4 as uuidv4 } from 'uuid'
-
 export class Bank {
+    private customers: any[] = []
+    private balance: number = 0
 
-    constructor(initialBalance = 0) {
-        this.customers = []
+    constructor(initialBalance: number = 0) {
         this.balance = initialBalance
     }
 
-    getBalance() {
-        let totalBalance = 0
+    getBalance(): number {
+        let totalBalance: number = 0
         this.customers.forEach(customer => {
             totalBalance += customer.getBalance()
         })
 
-        console.log(`Bank balance: ${totalBalance}`)
         return totalBalance
     }
 
-    newCustomer(customer) {
+    displayBalance() : void {
+        console.log(`Bank Total Balance: ${this.getBalance()}`)
+    }
+
+    newCustomer(customer: Customer): void {
         this.customers = [...this.customers, customer]
     }
 
-    getCustomer(accountNumber) {
-        return this.customers.find(customer => customer.accountNumber === accountNumber)
+    getCustomer(accountNumber: string): any {
+        return this.customers.find((customer: Customer) => customer.getAccountNumber() === accountNumber)
+    }
+
+    getCustomers(): Customer[] {
+        return this.customers
     }
 }
 
 export class BankManager {
-    constructor(bank) {
+    private bank: Bank
+    constructor(bank: Bank) {
         this.bank = bank
     }
 
-    checkBankBalance() {
+    checkBankBalance(): number {
         return this.bank.getBalance()
     }
 }
 
 export class Customer {
-    constructor(name, balance) {
-        this.accountNumber = uuidv4()
+    private accountNumber: string
+    private name: string
+    private balance: number
+
+    constructor(name: string, balance: number) {
+        this.accountNumber = String(Math.random())
         this.name = name
         this.balance = balance
     }
 
-    getAccountNumber() {
+    getAccountNumber(): string {
         return this.accountNumber
     }
 
-    getBalance() {
+    getBalance(): number {
         return this.balance
     }
 
-    checkBalance() {
-        console.log(`Your current balance is:`, this.balance)
-        return this.balance
+    displayBalance(): void {
+        console.log(`Current Balance:`, this.balance)
     }
 
-    withdraw(amount) {
-        if(amount > this.balance) {
+    withdraw(amount: number): number {
+        if (amount > this.balance) {
             throw new Error('Insufficient funds.')
         }
 
@@ -68,24 +78,24 @@ export class Customer {
         return amount
     }
 
-    deposit(amount) {
+    deposit(amount: number): void {
         this.balance += amount
         console.log(`Successfully deposited: ${amount}`)
     }
 
-    receive(amount) {
+    receive(amount: number): void {
         this.balance += amount
         console.log(`Successfully received: ${amount}`)
     }
 
-    transfer(bank, accountNumber, amount) {
-        if(amount > this.balance) {
+    transfer(bank: Bank, accountNumber: string, amount: number): void {
+        if (amount > this.balance) {
             throw new Error('Insufficient funds.')
         }
 
         const customerTo = bank.getCustomer(accountNumber)
-        
-        if(!customerTo) {
+
+        if (!customerTo) {
             throw new Error('User not found.')
         }
 
@@ -97,8 +107,7 @@ export class Customer {
 
 
 const bank = new Bank()
-const bankManager = new BankManager(bank);
-
+const bankManager = new BankManager(bank)
 
 const peter = new Customer('Peter', 100)
 const jane = new Customer('Jane', 200)
@@ -110,6 +119,6 @@ peter.withdraw(20)
 peter.deposit(100)
 
 peter.transfer(bank, jane.getAccountNumber(), 150)
-jane.checkBalance()
+jane.displayBalance()
 
 console.log(bankManager.checkBankBalance())

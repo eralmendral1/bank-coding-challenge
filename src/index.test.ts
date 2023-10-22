@@ -1,6 +1,6 @@
 
 import { describe, expect, test } from 'vitest'
-import { Bank, BankManager, Customer } from '.'
+import { Bank, BankManager, Customer } from './'
 
 describe('Bank Test Suite', () => {
     test('Create a bank with initial empty balance.', () => {
@@ -23,7 +23,7 @@ describe('Bank Test Suite', () => {
         bank.newCustomer(Morpheus)
 
         expect.assertions(2)
-        expect(bank.customers).toHaveLength(2)
+        expect(bank.getCustomers()).toHaveLength(2)
         expect(bank.getBalance()).toBe(NeoInitialBalance + MorpheusInitialBalance)
     })
 
