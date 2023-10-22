@@ -1,0 +1,17 @@
+{
+  "name": "Cooee",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "eric almendral",
+  "license": "MIT",
+  "type": "module",
+  "scripts" : {
+    "test" : "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^0.34.6"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  }
+}
